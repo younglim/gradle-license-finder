@@ -11,15 +11,20 @@ if [[ ! -f "$input_file" ]]; then
 fi
 
 # Clear or create the output file
-echo "Package,Subclass,License(s),Package URL" > "$output_file"
+echo "Package,Subclass,Version,Combined,License(s),Package URL" > "$output_file"
 
 # Deduplicate entries by {Package, Subclass}
 awk -F, '!seen[$1,$2]++' "$input_file" > deduplicated_input.txt
 
 # Process each unique package
-while IFS=, read -r group artifact _; do
+while IFS=, read -r group artifact version _; do
   # Skip header line or empty lines
   [[ "$group" == "Package" || -z "$group" ]] && continue
+
+  sanitized_version=$(echo "$version" | sed 's/{strictly //g' | sed 's/} ->.*//g')
+
+  # Concatenate Group, Artifact, and Version into one column
+  combined="${group}.${artifact}.${sanitized_version}"
 
   query_url="https://mvnrepository.com/artifact/$group/$artifact"
 
@@ -38,14 +43,14 @@ while IFS=, read -r group artifact _; do
   # Handle no license case
   if [[ -z "$licenses" ]]; then
     licenses="No license information found"
-    query_url=""
+    #query_url=""
   fi
 
   # Write to the output file
-  echo "$group,$artifact,$licenses,$query_url" >> "$output_file"
+  echo "$group,$artifact,$sanitized_version,$combined,$licenses,$query_url" >> "$output_file"
 
   # Print progress
-  echo "Processed: $group.$artifact"
+  echo "Processed: $group.$artifact.$sanitized_version"
 done < deduplicated_input.txt
 
 # Remove temporary deduplicated input file
