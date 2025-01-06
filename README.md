@@ -7,12 +7,27 @@ Checks dependencies from output of gradlew :app:dependencies and searches maven 
 - Run `./gradle-find-dependencies.sh` to query dependencies.
 - Run `./mvn-query-licenses.sh` to get licenses to output in CSV.
 
-## Additional Stepts
-- Download and install python3 `brew install python`
-- Edit the license_report.csv to include the fully license text by going to the Package_URL
-- License text can be found in the link at the bottom, fill in the terms with the License Text
-- Run `python3 license-formatter.py <your input file> <your output file>` to format the output CSV into a LICENSE text file.
-- e.g. `python3 license-formatter.py third-party-license-graddle.csv LICENSE`
+## Additional steps to Format License Information
+1. **Install Python 3:**
+   - Run the following command to install Python 3:
+     ```bash
+     brew install python
+     ```
+2. **Edit the `license_report.csv`:**
+   - Open the `license_report.csv` file.
+   - Go to the `Package_URL` column in the file and visit the URL for each package.
+   - Find the full license text at the bottom of the page.
+   - Copy the license text and paste it into the corresponding row in the `License Text` column.
+3. **Format the CSV into a LICENSE Text File:**
+   - Once you've updated the CSV file, run the following command to format it into a LICENSE text file:
+     ```bash
+     python3 license-formatter.py <input file> <output file>
+     ```
+   - For example, if your input file is `third-party-license-graddle.csv` and you want the output file to be `LICENSE`, run:
+     ```bash
+     python3 license-formatter.py third-party-license-graddle.csv LICENSE
+     ```
+This will generate the LICENSE text file based on the information in the CSV file.
 
 ## Example/Current Files
 1. **[dependencies_linear_deduplicated.txt]**  
