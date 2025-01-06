@@ -26,7 +26,7 @@ while IFS=, read -r group artifact version _; do
   # Concatenate Group, Artifact, and Version into one column
   combined="${group}.${artifact}.${sanitized_version}"
 
-  query_url="https://mvnrepository.com/artifact/$group/$artifact"
+  query_url="https://mvnrepository.com/artifact/$group/$artifact/$sanitized_version"
 
   # Print the query URL for reference
   echo "Query URL: $query_url"
